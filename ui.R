@@ -11,8 +11,10 @@ library(readxl)
          dashboardSidebar(
              sidebarMenu(
                  menuItem("Vue globale", tabName = "vue", icon = icon("dashboard")),
-                 menuItem("TOPs", tabName = "top", icon = icon("list-ol"))
-                 
+                 menuItem("TOPs", tabName = "top", icon = icon("list-ol")),
+                tabItem(tabName = "visualization",
+              h1("Visualisation des données")
+      )
                  
                  )
          ),
