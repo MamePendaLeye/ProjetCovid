@@ -96,7 +96,19 @@ shinyUI(
                                   valueBox(sum(labase$`Cas positifs`),"Nombre cas postifs", icon = icon("eye-open", lib = "glyphicon"),color="yellow"),
                                   valueBox(sum(labase$Deces),"Nombre Décès", icon = icon("user", lib = "glyphicon"), color = "red"),
                                   valueBox(sum(labase$`Cas gueris`),"Nombre guéris", icon = icon("thumbs-up", lib = "glyphicon"), color = "green")
-                                 ),h1("Cas communautaire")),
+                                 ), column(
+                                   width = 12,
+                                   box(
+                                     title = "Evolution des cas communautaires",
+                                     footer = "Evolution des cas communautaires",
+                                     status = "info",
+                                     width = 12,
+                                     solidHeader = TRUE,
+                                     
+                                     plotOutput("cas_com")
+                                     
+                                   )
+                                 )),
                        
                        tabItem(tabName ="vue", box(title = "Evolution de la pandemie de Covid-19 au Sénégal",
                                                   plotOutput("evolution"), 
