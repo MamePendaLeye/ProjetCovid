@@ -8,9 +8,6 @@ library(dplyr)
 library(timetk)
 #Importation de la base de données
 labase = read_xlsx("BaseCovidSN.xlsx")
-ggplot(labase, aes(Date, `Cas importes`)) + geom_line()
-ggplot(labase, aes(Date, `Cas contact`)) + geom_line()
-ggplot(labase, aes(Date, `Cas communautaires`)) + geom_line()
 #le serveur
 shinyServer(function(input,output){
 
@@ -36,8 +33,7 @@ shinyServer(function(input,output){
     ggplot(labase, aes(Date, `Deces`)) + geom_line()
   })
   
+  output$cas_com <- renderPlot({
+    ggplot(labase, aes(Date, `Cas communautaires`)) + geom_line()
+  })
 })
-
-
-
-
