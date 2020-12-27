@@ -1,9 +1,13 @@
 library(shiny)
 library(shinydashboard)
 library(readxl)
+library(readr)
 library(ggplot2)
 library(dplyr)
-labase = read_xlsx("BaseCovidSN.xlsx")
+library(DT)
+labase = read_excel("BaseCovidSN.xlsx")
+#paste(labase$Date,collapse = "-")
+#view(labase)
 shinyUI(
   dashboardPage(
     
@@ -18,12 +22,14 @@ shinyUI(
      dashboardSidebar(
      #bareMenu
       sidebarMenu( 
-        menuItem("Base de donné",tabName = "données",icon = icon("data")),  
+        menuItem("Base de donné",tabName = "données",icon = icon("database")),  
         menuItem("Cas positifs",tabName = "cas1",icon = icon("user-plus")),
         menuItem("Cas gueri",tabName = "cas2",icon = icon("virus-slash")),
-        menuItem("Cas de  decès",tabName = "cas3" ,icon = icon("dizzy")),
-        menuItem("Cas communautaire",tabName = "cas4",icon = icon("virus-slash")),
-        menuItem("Total des cas",tabName = "courbe",icon = icon("virus-slash"))
+        menuItem("Cas de  decès",tabName = "cas3" ,icon = icon("skull-crossbones")),
+        menuItem("Cas communautaire",tabName = "cas4",icon = icon("virus")),
+        menuItem("Cas importé",tabName = "cas5" ,icon = icon("file-import")),
+        menuItem("Cas contact",tabName = "cas6" ,icon = icon("dizzy")),
+        menuItem("Total des cas",tabName = "courbe",icon = icon("plus"))
       
                 )),
   
@@ -108,7 +114,50 @@ shinyUI(
                                      plotOutput("cas_com")
                                      
                                    )
-                                 )),
+                                 )), 
+                       tabItem(tabName = "cas5",
+                                             #pour les nombres totaux des cas
+                                             fluidRow(
+                                               valueBox(sum(labase$`Cas positifs`),"Nombre  cas postifs", icon = icon("eye-open", lib = "glyphicon"),color="yellow"),
+                                               valueBox(sum(labase$Deces),"Nombre Décès", icon = icon("user", lib = "glyphicon"), color = "red"),
+                                               valueBox(sum(labase$`Cas gueris`),"Nombre guéris", icon = icon("thumbs-up", lib = "glyphicon"), color = "green")
+                                               ,
+                                               column(
+                                                 width = 12,
+                                                 box(
+                                                   title = "Evolution des cas importes",
+                                                   footer = "Evolution des cas importes",
+                                                   status = "info",
+                                                   width = 12,
+                                                   solidHeader = TRUE,
+                                                   
+                                                   plotOutput("cas_import")
+                                                   
+                                                 )
+                                               )
+                                             )), 
+                       tabItem(tabName = "cas6",
+                                                         #pour les nombres totaux des cas
+                                                         fluidRow(
+                                                           valueBox(sum(labase$`Cas positifs`),"Nombre  cas postifs", icon = icon("eye-open", lib = "glyphicon"),color="yellow"),
+                                                           valueBox(sum(labase$Deces),"Nombre Décès", icon = icon("user", lib = "glyphicon"), color = "red"),
+                                                           valueBox(sum(labase$`Cas gueris`),"Nombre guéris", icon = icon("thumbs-up", lib = "glyphicon"), color = "green")
+                                                           ,
+                                                           column(
+                                                             width = 12,
+                                                             box(
+                                                               title = "Evolution des cas Contact",
+                                                               footer = "Evolution des cas contact",
+                                                               status = "info",
+                                                               width = 12,
+                                                               solidHeader = TRUE,
+                                                               
+                                                               plotOutput("cas_contact")
+                                                               
+                                                             )
+                                                           )
+                                                         )),
+                       
                        
                        tabItem(tabName ="vue", box(title = "Evolution de la pandemie de Covid-19 au Sénégal",
                                                   plotOutput("evolution"), 
@@ -124,11 +173,11 @@ shinyUI(
                                  valueBox(sum(labase$`Cas gueris`),"Nombre guéris", icon = icon("thumbs-up", lib = "glyphicon"), color = "green")
                            )
                          ),
-                        tabItem(tabName = "données", fluidRow(
-                          valueBox(sum(labase$`Cas positifs`),"Nombre total cas postifs", icon = icon("eye-open", lib = "glyphicon"),color="yellow"),
-                          valueBox(sum(labase$Deces),"Nombre total Décès", icon = icon("user", lib = "glyphicon"), color = "red"),
-                          valueBox(sum(labase$`Cas gueris`),"Nombre total guéris", icon = icon("thumbs-up", lib = "glyphicon"), color = "green")
-                        ),box( title = "Base de données utilisée", tableOutput("base"), width = 34))
+                       tabItem(tabName = "données", fluidRow(
+                         valueBox(sum(labase$`Cas positifs`),"Nombre total cas postifs", icon = icon("eye-open", lib = "glyphicon"),color="yellow"),
+                         valueBox(sum(labase$Deces),"Nombre total Décès", icon = icon("user", lib = "glyphicon"), color = "red"),
+                         valueBox(sum(labase$`Cas gueris`),"Nombre total guéris", icon = icon("thumbs-up", lib = "glyphicon"), color = "green")
+                       ),box( title = "Base de données utilisée", tableOutput("base"), width = 34))
                     
                              )
 )))
